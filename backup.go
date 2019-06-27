@@ -9,6 +9,12 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+type S3PathTransform = func(sftpPath string) string
+
+var DefaultS3PathTransform = func(path string) string {
+	return path
+}
+
 type Config struct {
 	User              string
 	Address           string
@@ -48,6 +54,7 @@ func (c *Client) Init() error {
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(signer),
 		},
+		// For now allow the InsecureIgnoreHostKey
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
@@ -66,7 +73,10 @@ func (c *Client) Init() error {
 	return nil
 }
 
-func (c *Client) Backup(directory, bucket string) error {
+// Backup simply backsup all the files present in the directory to the mentioned
+// bucket in S3. It also applies path transformer to each fileentry when identifying
+// the key under which it needs to be uploaded onto s3.
+func (c *Client) Backup(directory, bucket string, transformer S3PathTransform) error {
 
 	files, err := c.sftp.ReadDir(directory)
 	if err != nil {
@@ -91,7 +101,10 @@ func (c *Client) Backup(directory, bucket string) error {
 		b := bytes.NewBuffer([]byte{})
 		f.WriteTo(b)
 
-		err = Upload(bucket, files[i].Name(), b)
+		// Apply the transformation to path the needs to be uploaded
+		// onto s3. If we need to change the file name of path.
+		key := transformer(fmt.Sprintf("%s/%s", directory, files[i].Name()))
+		err = Upload(bucket, key, b)
 		if err != nil {
 			fmt.Println("Unable to upload the information to AWS, exiting.")
 			return err
@@ -104,5 +117,3 @@ func (c *Client) Backup(directory, bucket string) error {
 func (c *Client) Close() error {
 	return c.sftp.Close()
 }
-
-type S3PathTransform = func(sftpPath string) string
