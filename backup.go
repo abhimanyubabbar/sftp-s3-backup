@@ -34,6 +34,9 @@ type Client struct {
 	sftp   *sftp.Client
 }
 
+// Init bootstraps the backup client with the necessary
+// data and connections to perform the task of backing up data
+// from the sftp.
 func (c *Client) Init() error {
 
 	config := c.config
@@ -109,6 +112,9 @@ func (c *Client) Backup(directory, bucket string, transformer S3PathTransform) e
 			fmt.Println("Unable to upload the information to AWS, exiting.")
 			return err
 		}
+
+		fmt.Printf("Successfully uploaded file: %s to %s on s3 with bucket: %s\n",
+			path, key, bucket)
 	}
 
 	return nil
