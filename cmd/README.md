@@ -1,8 +1,8 @@
-#`/cmd`
+# `/cmd`
 It contains main applications of this projects. The applications are divided into this:
 
 
-###`backup`
+### `backup`
 It basically backs up the files directory on the sftp over to S3. In order to run this utility, we need to first set the AWS credentials in the environment variables. Refer this guide for more information [AWS Environ](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html).
 
 ```
@@ -11,7 +11,7 @@ ata/backup/distribution/test/uploads" -b="internal.epidemicsound.distribution.sf
 ```
 
 
-###`move`
+### `move`
 It moves the files in one directory over to another. At the time of writing this, it only moves files in the base directory over to the next one.
 
 ```
