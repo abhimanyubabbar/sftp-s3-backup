@@ -25,9 +25,20 @@ func main() {
   client := backup.Client(config)
   client.Init()
 
-  err := client.Backup("/data/user/uploads", "aws.bucket")
+  err := client.Backup(
+    "/data/user/uploads",
+    "aws.bucket",
+    backup.DefaultPathTransformer)
+
+  // If we don't want the default path transformer
+  // we can override it with our own implementation.
+
   if err != nil {
     log.Fatalf("Unable to backup, err: %s", err.Error())
   }
 }
 ```
+
+
+### AWS Variables
+In order to backup the files onto S3, we need to access the AWS variables which would allow us to login to the platform and upload the information into corresponding bucket. More information could be read at [AWS Env](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)

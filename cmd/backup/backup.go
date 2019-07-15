@@ -79,5 +79,5 @@ func backItUp(c *cli.Context) error {
 	return client.Backup(
 		c.String("dir"),
 		c.String("bucket"),
-		backup.DefaultS3PathTransform)
+		backup.DefaultS3PathTransformer)
 }

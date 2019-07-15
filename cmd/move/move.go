@@ -61,8 +61,6 @@ func main() {
 
 func move(c *cli.Context) error {
 
-	fmt.Println("Called me")
-
 	client, err := getSFTPClient(
 		c.String("user"),
 		c.String("address"),

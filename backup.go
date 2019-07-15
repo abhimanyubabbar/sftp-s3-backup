@@ -11,7 +11,7 @@ import (
 
 type S3PathTransform = func(sftpPath string) string
 
-var DefaultS3PathTransform = func(path string) string {
+var DefaultS3PathTransformer = func(path string) string {
 	return path
 }
 
