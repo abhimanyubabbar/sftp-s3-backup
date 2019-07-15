@@ -23,9 +23,14 @@ func main() {
   }
 
   client := backup.Client(config)
-  client.Init()
+  err := client.Init()
+  if err != nil {
+    log.Fatalf("Unable to initialize the client: %s", err.Error())
+  }
 
-  err := client.Backup(
+  defer client.Close()
+
+  err = client.Backup(
     "/data/user/uploads",
     "aws.bucket",
     backup.DefaultPathTransformer)
