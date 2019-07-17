@@ -12,8 +12,8 @@ import (
 func main() {
 
 	app := cli.NewApp()
-	app.Name = "sftp-move"
-	app.Usage = "moving the files over sftp from one directory to another"
+	app.Name = "sftp-backup"
+	app.Usage = "backing up the files from sftp to s3"
 	app.Version = "0.0.1"
 
 	app.Flags = []cli.Flag{
