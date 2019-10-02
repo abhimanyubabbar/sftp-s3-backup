@@ -87,12 +87,11 @@ func move(c *cli.Context) error {
 		newPath := fmt.Sprintf("%s/%s", newDirectory, files[i].Name())
 
 		err = client.PosixRename(oldPath, newPath)
+		if err != nil {
+			fmt.Printf("Unable to complete the move of files, error: %s\n", err.Error())
+			return err
+		}
 		fmt.Printf("Successfully moved, old: %s, new: %s\n", oldPath, newPath)
-	}
-
-	if err != nil {
-		fmt.Printf("Unable to complete the move of files, error: %s\n", err.Error())
-		return err
 	}
 
 	fmt.Println("Finished transferring the data between the directories")
