@@ -89,8 +89,8 @@ func (c *Client) Backup(directory, bucket string, transformer S3PathTransform) e
 	for i := 0; i < len(files); i++ {
 
 		if files[i].IsDir() {
-			fmt.Printf("Found directory: %s, skipping\n", files[i].Name())
-			continue
+			c.Backup(
+				fmt.Sprintf("%s/%s", directory, files[i].Name), bucket, transformer)
 		}
 
 		path := fmt.Sprintf("%s/%s", directory, files[i].Name())
